@@ -1,0 +1,17 @@
+#searchform {
+  padding: 3%;
+}
+
+#searchform > form {
+  display: grid;
+  width: 50%;
+  grid-template-columns: 1fr 1fr;
+}
+
+.buttons > button,
+#searchform > form > mat-form-field {
+  margin-right: 1em;
+}
+.grid-positioning {
+  display: grid
+}
