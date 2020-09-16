@@ -6,10 +6,7 @@ import { NgModule} from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { AppComponent } from './app.component';
-import { HelloComponent } from './hello.component';
-
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MaterialModule } from './material.module';
 import { TransportService } from './services/transport.service';
@@ -22,6 +19,7 @@ import { DatePipe } from '@angular/common';
 import { environment } from '../environments/environment';
 import { SectionsComponent } from './connections/sections/sections.component';
 import { PassInfoDialogComponent } from './pass-info-dialog/pass-info-dialog.component';
+import { ConnectionsComponent } from './connections/connections.component';
 
 
 
@@ -51,8 +49,8 @@ import { PassInfoDialogComponent } from './pass-info-dialog/pass-info-dialog.com
   ],
   declarations: [ 
     AppComponent, 
-    HelloComponent, 
     TransportsComponent,
+    ConnectionsComponent,
     ConnectionDetailComponent,
     SectionsComponent,
     PassInfoDialogComponent
