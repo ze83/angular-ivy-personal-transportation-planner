@@ -1,0 +1,29 @@
+.mat-dialog-content {
+  padding: 0 6px !important
+}
+
+.passList {
+  display: grid;
+  place-content: center;
+}
+
+.passInfo {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 1em;
+  min-width: 250px;
+  width: auto;
+}
+
+.passInfo .timetable_times {
+  text-align: left;
+  width: auto;
+}
+
+.passInfo .timetable_times .mat-list-item-content {
+  padding: 0 6px !important
+}
+
+.passInfo .timetable_content .mat-list-item .mat-list-item-content {
+  padding: 0px !important
+}

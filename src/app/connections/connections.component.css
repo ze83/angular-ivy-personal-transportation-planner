@@ -1,0 +1,15 @@
+.element-row:not(.expanded-row):hover {
+  background: whitesmoke;
+}
+
+.element-row:not(.expanded-row):active {
+  background: #efefef;
+}
+
+.mat-column-transfers,
+.mat-column-platform,
+.mat-column-favorite {
+  max-width: 90px;
+  justify-content: center;
+  display: grid;
+}

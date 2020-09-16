@@ -9,7 +9,15 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule, MatLineModule } from "@angular/material/core";
 import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatListModule } from "@angular/material/list";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+
+
 
 @NgModule({
   imports: [
@@ -25,6 +33,12 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
     MatPaginatorModule,
     MatCheckboxModule,
     MatLineModule,
+    MatListModule,
+    MatProgressSpinnerModule,
+    MatSidenavModule,
+    MatExpansionModule,
+    MatDialogModule,
+    MatProgressBarModule
     
   ],
   exports: [
@@ -39,7 +53,13 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
     MatTableModule,
     MatPaginatorModule,
     MatCheckboxModule,
-    MatLineModule
+    MatLineModule,
+    MatListModule,
+    MatProgressSpinnerModule,
+    MatSidenavModule,
+    MatExpansionModule,
+    MatDialogModule,
+    MatProgressBarModule
   ]
 })
 export class MaterialModule {}

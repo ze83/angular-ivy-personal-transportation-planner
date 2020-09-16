@@ -1,5 +1,8 @@
+import { Station } from './station';
+
 export interface Departure {
-  departure: string,
-  departureTimestamp: number,
-  platform: string
+  station: Station;
+  departure: string;
+  departureTimestamp: number;
+  platform: string;
 }

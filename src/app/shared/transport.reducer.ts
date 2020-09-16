@@ -1,79 +1,82 @@
-import { Connection } from "../model/connection";
-import { 
-  ConnectionActions,
-  ADD_CONNECTION,
-  ADD_FAVORITE_CONNECTION,
-  REMOVE_CONNECTION,
-  REMOVE_FAVORITE_CONNECTION,
-  SET_CONNECTIONS,
-  SET_FAVORITE_CONNECTIONS
-  } from "./transport.actions";
-import { createFeatureSelector, createSelector } from "@ngrx/store";
+import {
+  ActionReducer,
+  ActionReducerMap,
+  createFeatureSelector,
+  createSelector,
+  MetaReducer,
+  createReducer,
+  on
+} from '@ngrx/store';
+import { environment } from '../../environments/environment';
+import { Transport } from '../model/transport';
+import { EntityState, createEntityAdapter } from '@ngrx/entity';
+import { Connection } from '../model/connection';
+import { TransportActions } from './action-types';
 
-export interface State {
-    addConnection: Connection,
-    addFavoriteConnection: string,
-    removeConnection: string,
-    removeFavoriteConnection: string,
-    connections: Connection[],
-    favoriteConnections: Connection[]
+export interface TransportsState extends EntityState<Connection> {
+  allTransportsLoaded: boolean; //
+  loading: boolean;
+  selectedConnectionId: string;
 }
 
-const initialState: State = {
-  addConnection: null,
-  addFavoriteConnection: null,
-  removeConnection: null,
-  removeFavoriteConnection: null,
-  connections: [],
-  favoriteConnections: []
-}
+export const adapter = createEntityAdapter<Connection>(
 
-export function transportReducer(state = initialState, action: ConnectionActions) {
-  switch(action.type) {
-    case ADD_CONNECTION:
-      console.log(action.payload);
-      return {
-        ...state,
-        connections: state.connections.concat(action.payload)
-      };
-    case ADD_FAVORITE_CONNECTION:
-      console.log(action.payload);
-      let favorite = {...state.connections.find(connect => connect.id === action.payload)}
-      favorite.favorite = true;     
-      return {
-        ...state,
-        favoriteConnections: state.favoriteConnections.concat(favorite)
-      };    
-    case REMOVE_CONNECTION:
-      return {
-        ...state,
-        connections: state.connections.filter(connct => connct.id !== action.payload)
-      };
-    case REMOVE_FAVORITE_CONNECTION:
-      return {
-        ...state,
-        favoriteConnections: state.favoriteConnections.filter(connct => connct.id !== action.payload)
-      };
-    case SET_CONNECTIONS:
-      return {
-        ...state,
-        connections: action.payload
-      };
-    case SET_FAVORITE_CONNECTIONS:
-      return {
-        ...state,
-        favoriteConnections: state.favoriteConnections
-      };      
-    default: {
-      return state;
-    }
-  }
-}
+);
 
-export const getAddedConnection = (state: State) => state.connections;
-export const getRemovedConnection = (state: State) => state.connections;
-export const getConnections = (state: State) => state.connections;
+export const initialTransportsState = adapter.getInitialState({
+  allTransportsLoaded: false,
+  loading: false,
+  selectedConnectionId: null
+});
 
-export const getAddedFavoriteConnection = (state: State) => state.favoriteConnections;
-export const getRemovedFavoriteConnection = (state: State) => state.favoriteConnections;
-export const getFavoriteConnections = (state: State) => state.favoriteConnections;
+export const transportReducer = createReducer(
+
+    initialTransportsState,
+
+    on(TransportActions.loadTransportParam,
+      (state, action) => {
+
+        if (action.transport.page === 0) {
+          return adapter.removeAll(
+            {
+              ...state,
+              allTransportsLoaded: false,
+              loading: true
+            }
+            );
+        } else {
+          return {
+            ...state,
+            allTransportsLoaded: true,
+            loading: true
+          };
+        }
+
+      }
+    ),
+
+    on(TransportActions.loadTransports,
+      (state, action) => adapter.addMany(
+          action.transports,
+          {...state,
+            allTransportsLoaded: true,
+            loading: false
+          }
+      )),
+
+    on(TransportActions.setConnectionFavorited,
+      (state, action) => adapter.updateOne(action.update, state)),
+
+    on(TransportActions.setConnectionId,
+      (state, action) => ({...state, selectedConnectionId: action.id})
+      )
+
+);
+
+export const getSelectedUserId = (state: TransportsState) => state.selectedConnectionId;
+
+
+export const {
+  selectEntities,
+  selectAll
+} = adapter.getSelectors();

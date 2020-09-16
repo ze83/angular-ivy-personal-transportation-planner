@@ -1,5 +1,132 @@
-/* Add application styles & imports to this file! */
-@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+#header {
+  height: auto !important;
+  padding: 1em 0;
+}
+
+#header .mat-list-base .mat-list-item {
+  height: auto !important;
+}
+
+#header .title,
+#header .title_mobile {
+  color: #f44336;
+  font-size: 1.6em;
+}
+
+#header .subtitle {
+  font-size: 1em;
+  font-weight: 300;
+}
+
+#header .subtitle_mobile {
+  font-size: 0.8em;
+  font-weight: 400;
+  margin-top: 0.4em;
+}
+
+/* .primary {
+  background: #e92516;
+} */
+
+.secondary {
+  background: #898b88
+}
+
+.colorSecondary {
+  color: #e1e1e1
+}
+
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+ion-checkbox {
+  --handle-background-checked: #fff url(./assets/star_border.svg) no-repeat center / contain;
+}
+
+.spaceH {
+  padding: 26px 0;
+}
+
+.deleteIcon .material-icons{
+  font-size: 30px !important;
+}
+
+.mat-expansion-panel-spacing {
+  padding: 16px 0
+}
+
+.mat-expansion-panel-body {
+  padding: 24px 24px 0 !important;
+}
+
+ion-button, .button-native, .info-button{
+  --background: #898b88 !important;
+  --color: var(--ion-color-primary-contrast, #fff);
+}
+
+mat-row {
+  background: #f2f2f2 !important;
+  border-bottom-color: #fff !important;
+}
+
+.mat-column-select {
+  overflow: initial;
+}
+
+.mat-header-row {
+  background: #b1aaaa;
+}
+
+.mat-header-cell {
+  color: #f2f2f2 !important;
+  font-size: 15px !important;
+}
+
+mat-row:hover {
+  background: #d3d0d0 !important
+}
+
+@media screen and (max-width: 499px) {
+  .title {
+    display: none !important;
+  }
+  .title_mobile,
+  .subtitle_mobile {
+    display: inline !important;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .title {
+    display: inline !important;
+  }
+  .title_mobile,
+  .subtitle_mobile {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 799px) {
+  mat-sidenav {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  #searchform > form {
+    max-width: 650px
+  }
+
+  mat-sidenav {
+    width: 35%;
+  }
+}
+

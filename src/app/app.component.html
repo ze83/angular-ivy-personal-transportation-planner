@@ -1,6 +1,18 @@
-<mat-toolbar>
-  <mat-toolbar-row>
-    <span>Personal Transportation Planner</span>
-  </mat-toolbar-row>
-</mat-toolbar>
-<app-transports></app-transports>
+<mat-sidenav-container fullscreen>
+
+  <mat-sidenav #detail mode="side" position="end">
+      <app-connection-detail (onClose) = "closeRightNavPanel()"></app-connection-detail>
+  </mat-sidenav>
+
+  <mat-toolbar id="header">
+      <mat-list>
+        <mat-list-item class="title"><span>Public Transportation Planner</span></mat-list-item>
+        <mat-list-item class="title_mobile"><span>PTP</span></mat-list-item>
+        <mat-list-item class="subtitle_mobile"><span>Public Transportation Planner</span></mat-list-item>
+        <mat-list-item class="subtitle"><span>Swiss public transport API</span></mat-list-item>
+      </mat-list>
+
+  </mat-toolbar>
+  <app-transports (onConnectionClick) = "openRightNavPanel()"></app-transports>
+
+</mat-sidenav-container>

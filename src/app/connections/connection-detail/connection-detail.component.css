@@ -1,0 +1,8 @@
+.connection-detail {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.connection-detail .mat-list:last-child {
+  background: #f3f3f3;
+}

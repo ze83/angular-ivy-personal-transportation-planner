@@ -1,0 +1,52 @@
+<!-- <div>transfers: {{connection == undefined ? '' : connection.transfers}}</div>
+<div>walk duration: {{connection == undefined ? '' : connection.duration}}</div> -->
+<div>
+  <mat-toolbar class="sectionToolbar">
+    <button mat-icon-button color="basic" (click)="skipPrevious()" [disabled]=isErst >
+      <mat-icon>skip_previous</mat-icon>
+    </button>
+    <span class="spacer"></span>
+    <span class="colorSecondary">JOURNEY</span>
+    <span class="spacer"></span>
+    <button mat-icon-button color="basic" (click)="skipNext()" [disabled]=isLast>
+      <mat-icon>skip_next</mat-icon>
+    </button>
+  </mat-toolbar>
+</div>
+<mat-accordion class="section-accordion" multi>
+  <mat-expansion-panel *ngFor="let section of connection.sections" [expanded]=true>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-list-item>
+          <div mat-line>{{section.departure.departure}}</div>
+          <div mat-line class="spaceH"></div>
+          <div mat-line>{{section.arrival.arrival}}</div>
+        </mat-list-item>
+        <!-- <mat-icon>schedule</mat-icon> -->
+      </mat-panel-title>
+
+      <mat-panel-description>
+        <mat-list-item>
+          <div mat-line> {{section.departure.station.name}}</div>
+          <div *ngIf="
+                  section.walk == undefined ||
+                  section.walk == null ? false : true" mat-line>
+                  <mat-icon>directions_walk</mat-icon> {{convertSecInMin(section.walk.duration)}}
+          </div>
+          <div *ngIf="
+                  section.journey == null ? false : true" mat-line>
+                  <mat-icon>train</mat-icon> {{section.journey.name}}
+          </div>
+          <div mat-line> {{section.arrival.station.name}}</div>
+        </mat-list-item>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <ion-button *ngIf="
+                  section.journey == null ? false : true"
+                class="info-button"
+                expand="full"
+                (click)="openTrainInfoDialog(section.journey)">
+      Train Info
+    </ion-button>
+  </mat-expansion-panel>
+</mat-accordion>

@@ -1,42 +1,33 @@
-import { Action } from "@ngrx/store";
-import { Connection } from "../model/connection";
-
-export const ADD_CONNECTION = '[CONNECTION] Added a new Connection';
-export const REMOVE_CONNECTION = '[CONNECTION] Removed a Connection';
-export const SET_CONNECTIONS = '[CONNECTIONS] Set the Connections';
-export const ADD_FAVORITE_CONNECTION = '[CONNECTIONS] Add the favorite Connection';
-export const REMOVE_FAVORITE_CONNECTION = '[CONNECTIONS] Remove a favorite Connection';
-export const SET_FAVORITE_CONNECTIONS = '[CONNECTIONS] Set the favorite Connections';
-
-export class AddConnection implements Action {
-  readonly type = ADD_CONNECTION;
-  constructor(public payload: Connection) {}
-}
-
-export class AddFavoriteConnection implements Action {
-  readonly type = ADD_FAVORITE_CONNECTION;
-  constructor(public payload: string) {}
-}
-
-export class RemoveConnection implements Action {
-  readonly type = REMOVE_CONNECTION;
-  constructor(public payload: string) {}
-}
-
-export class RemoveFavoriteConnection implements Action {
-  readonly type = REMOVE_FAVORITE_CONNECTION;
-  constructor(public payload: string) {}
-}
-
-export class SetConnections implements Action {
-  readonly type = SET_CONNECTIONS;
-  constructor(public payload: Connection[]) {}
-}
-
-export class SetFavoriteConnections implements Action {
-  readonly type = SET_FAVORITE_CONNECTIONS;
-}
+import { Action, createAction, props } from '@ngrx/store';
+import { Connection } from '../model/connection';
+import { Transport } from '../model/transport';
+import { Update } from '@ngrx/entity';
 
 
-export type ConnectionActions = AddConnection | AddFavoriteConnection | RemoveConnection 
-| RemoveFavoriteConnection | SetConnections | SetFavoriteConnections;
+export const loadTransportParam = createAction (
+
+  '[Load Transport Parameters] All Transport Parameters loaded',
+  props<{transport: any}>()
+
+);
+
+export const loadTransports = createAction (
+
+  '[Load Transports Effect] All Transports Found',
+  props<{transports: Connection[]}>()
+
+);
+
+export const setConnectionFavorited = createAction (
+
+  '[Edit Connection Preference] Set Connection preferited',
+  props<{update: Update<Connection>}>()
+
+);
+
+export const setConnectionId = createAction(
+
+  '[Set Connection] Connection Detail Opened',
+  props<{id: string}>()
+
+);

@@ -1,0 +1,70 @@
+<div *ngIf="(connection$ | async) as connection">
+  <mat-toolbar color="primary">
+    <button mat-icon-button
+      class="colorSecondary"
+      (click)="close()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="spacer"></span>
+    <button mat-icon-button [color]="connection.favorite ? 'accent' : 'basic'">
+      <mat-icon>favorite</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <div class="connection-detail">
+    <!--Connection route-->
+    <mat-list>
+      <mat-list-item>
+        <mat-icon mat-list-icon>train</mat-icon>
+        <div mat-line>{{connection  == undefined ? '' : connection.from.station.name}}</div>
+        <div mat-line>
+            <strong>
+              Departure: {{connection  == undefined ? '' : connection.from.departure}}
+            </strong>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon mat-list-icon>train</mat-icon>
+        <div mat-line>{{connection  == undefined ? '' : connection.to.station.name}}</div>
+        <div mat-line>
+            <strong>
+              Arrival: {{connection == undefined ? '' : connection.to.arrival}}
+            </strong>
+        </div>
+      </mat-list-item>
+    </mat-list>
+    <!--Connection Info-->
+    <mat-list>
+      <mat-list-item>
+        <mat-icon mat-list-icon>schedule</mat-icon>
+        <div mat-line>Duration</div>
+        <div mat-line>
+            <strong>
+              {{connection  == undefined ? '' : connection.duration}}
+            </strong>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon mat-list-icon>transfer_within_a_station</mat-icon>
+        <div mat-line>Transfers</div>
+        <div mat-line style="text-align: center;">
+            <strong>
+              {{connection == undefined ? '' : connection.transfers}}
+            </strong>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+
+  <app-sections [connection]=connection></app-sections>
+
+</div>
+<div *ngIf="!(connection$ | async)">
+  <mat-toolbar color="primary">
+    <button mat-icon-button
+      class="example-icon"
+      (click)="close()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </mat-toolbar>
+</div>

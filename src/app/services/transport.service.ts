@@ -1,12 +1,14 @@
 import { Store } from "@ngrx/store";
 import { Injectable } from "@angular/core";
-import { from, Subject } from "rxjs";
+import { from, Subject, Observable } from "rxjs";
 import { tap, map, switchMap } from "rxjs/operators";
 import { Connection } from "../model/connection";
-import * as fromRoot from "../app.reducer";
+import * as fromRoot from "../shared/app.reducer";
 import * as TransportActions from "../shared/transport.actions"
 import { Departure } from "../model/departure";
 import { Arrival } from "../model/arrival";
+import { Section } from "../model/section";
+import { Utility } from "../shared/utility";
 
 
 
@@ -19,50 +21,79 @@ let URL = 'https://transport.opendata.ch/v1/connections?';
 
 export class TransportService {
   transportSubject = new Subject<Transport[]>();
-
-
+  connections$ = new Observable<Connection[]>();
+  connections: Connection[] = [];
   constructor(
-    private store: Store<fromRoot.State>
+    private store: Store<fromRoot.State>,
+    private utility: Utility
   ) {
 
   }
 
-  searchTransport(search: any) {
-    //clean the search results before to get the news one:
-    this.store.dispatch(new TransportActions.SetConnections([]));
-    let query = `
-      from=${search.from}&to=${search.to}&datetime=
+  async fetchTransports(param: string) {
+    // console.log(URL+param);
+    const p = await fetch(URL + param).then(result => result.json()).then(result => {
+      // console.log(result.connections);
+      return result.connections;
+    }).catch(error => console.log('errore di connessione', error));
+
+    // from(p).pipe(
+      // map(connection => console.log(connection))
+      //  tap(result => console.log(result))
+    // );
+    return p;
+  }
+
+  searchTransport(search: any): Observable<Connection[]> {
+    // clean the search results before to get the news one:
+
+    this.connections = [];
+
+    const query = `
+      from=${search.from}&
+      to=${search.to}&
+      date=${search.date}&
+      time=${search.time}&
+      page=${search.page}
     `;
-    //console.log(query);
-    let p = fetch(URL + query).then(result => result.json());
-    from(p).pipe(
-      switchMap(result => from(result.connections) || []),
-      
-      map(connect => {
-        console.log(connect);
-        let connection: Connection = {
-          id: Math.random().toString(36).substring(2, 15),
-          duration: this.getDuration(connect.duration),
-          products: this.getProducts(connect.products) || '',
-          sections: this.getTimeInfo(connect.sections) || [],
-          favorite: false
-        };
-        return connection;
+
+    return from(this.fetchTransports(query)).pipe(
+      // switchMap(result => from(result)),
+      map((connects: Connection[]) => {
+
+        if (connects != null) {
+          connects.forEach((connect: Connection) => {
+            const conn: Connection = {
+              id: Math.random().toString(36).substring(2, 15),
+              duration: this.getDuration(connect.duration),
+              products: this.getProducts(connect.products) || '',
+              // sections: this.getSections(connect) || [],
+              sections: this.getSections(connect).sections || [],
+              favorite: false,
+              from: this.getFrom(connect),
+              to: this.getTo(connect),
+              transfers: connect.transfers
+            };
+            this.connections.push(conn);
+          });
+        } else {
+          console.log('error');
+        }
+
+
+        connects = this.connections;
+        return connects;
       })
-      
-      //tap(result => console.log(result)) //tap single connection
-    ).subscribe(connection => {
-      //console.log(connection);
-      this.store.dispatch(new TransportActions.AddConnection(connection));
-    });
+    );
+
   }
 
   addToFavorite(id: string) {
-    this.store.dispatch(new TransportActions.AddFavoriteConnection(id));
+    // this.store.dispatch(new TransportActions.AddFavoriteConnection(id));
   }
 
   removeFromFavorite(id: string) {
-    this.store.dispatch(new TransportActions.RemoveFavoriteConnection(id));
+    // this.store.dispatch(new TransportActions.RemoveFavoriteConnection(id));
   }
 
   loadTransports() {
@@ -74,8 +105,10 @@ export class TransportService {
   }
 
   getDuration(duration: string) {
-    if(duration != null) {
-      return duration.substring(3);
+    if (duration != null) {
+      const _new = duration.substring(3);
+      const arr = _new.split(':', 2);
+      return arr[0] + ' h ' + arr[1] + ' m ';
     }
   }
 
@@ -83,46 +116,90 @@ export class TransportService {
     return products.join();
   }
 
+  getFrom(connection: Connection) {
+    connection.from.departure = this.utility.transformTimeFormat(
+      connection.from.departure
+    );
+    return connection.from;
+  }
+
+  getTo(connection: Connection) {
+    connection.to.arrival = this.utility.transformTimeFormat(
+      connection.to.arrival
+    );
+    return connection.to;
+  }
+
+  getSections(connection: Connection) {
+    connection.sections.map(
+      section => {
+        section.departure.departure = this.utility.transformTimeFormat(section.departure.departure);
+        section.arrival.arrival = this.utility.transformTimeFormat(section.arrival.arrival);
+        section.journey = this.getJourney(section);
+        return section;
+      }
+    );
+    return connection;
+  }
+
+  getJourney(section: Section) {
+    if (section.journey !== null) {
+      section.journey.passList.map(
+        pass => {
+          if (pass.departure !== null) {
+            pass.departure = this.utility.transformTimeFormat(pass.departure);
+          }
+          if (pass.arrival !== null) {
+            pass.arrival = this.utility.transformTimeFormat(pass.arrival);
+          }
+          return pass;
+        }
+      );
+      return section.journey; //a journey obj
+    }
+    return null;
+  }
+
   getTimeInfo(sections: any) {
-    let info = [];
+    const info = [];
     let departure: Departure;
     let arrival: Arrival;
-    let departureTime;
-    let arrivalTime;
-    if(sections.length === 1) {
+    let departureTime: string;
+    let arrivalTime: string;
+    if (sections.length === 1) {
       departure = sections[0].departure;
-      arrival= sections[0].arrival;
-    } else if(sections.length > 1){
-      departure= sections[0].departure;
-      arrival= sections[sections.length-1].arrival;
+      arrival = sections[0].arrival;
+    } else if (sections.length > 1) {
+      departure = sections[0].departure;
+      arrival = sections[sections.length - 1].arrival;
     }
-    let departureDate = new Date(departure.departure);
-    let arrivalDate = new Date(arrival.arrival);
+    const departureDate = new Date(departure.departure);
+    const arrivalDate = new Date(arrival.arrival);
     departureTime = 'Departure: ' + this.getHour(departureDate.getHours()) + ':' + this.getMinutes(departureDate.getMinutes());
     arrivalTime = 'Arrival: ' + this.getHour(arrivalDate.getHours()) + ':' + this.getMinutes(arrivalDate.getMinutes());
 
-    console.log(departureTime);
+    // console.log(departureTime);
     info.push(departureTime);
     info.push(arrivalTime);
     return info;
   }
 
   clearResults() {
-    this.store.dispatch(new TransportActions.SetConnections([]));
+    // this.store.dispatch(new TransportActions.SetConnections([]));
   }
 
   getHour(hours: number) {
-    if(hours<10) {
-      return '0'+hours.toString();
-    }else{
+    if (hours < 10) {
+      return '0' + hours.toString();
+    } else {
       return hours;
     }
   }
 
   getMinutes(minutes: number) {
-    if(minutes<10) {
-      return '0'+minutes.toString();
-    }else{
+    if(minutes < 10) {
+      return '0' + minutes.toString();
+    } else {
       return minutes;
     }
   }
