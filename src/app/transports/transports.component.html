@@ -1,64 +1,73 @@
-<div id="searchform">
-  <form [formGroup]="searchform">
-    <mat-form-field appearance="outline">
-      <mat-label>From</mat-label>
-      <input matInput formControlName="from" placeholder="From" required>
-      <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>To</mat-label>
-      <input matInput formControlName="to" placeholder="To" required>
-      <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
-    </mat-form-field>
-    <div class="datetime">
+<ion-content>
+  <mat-toolbar id="header">
+      <mat-list>
+        <mat-list-item class="title"><span>Public Transportation Planner</span></mat-list-item>
+        <mat-list-item class="title_mobile"><span>PTP</span></mat-list-item>
+        <mat-list-item class="subtitle"><span>Swiss public transport API</span></mat-list-item>
+      </mat-list>
+  </mat-toolbar>
+  <div id="searchform">
+    <form [formGroup]="searchform">
       <mat-form-field appearance="outline">
-        <mat-label>Choose a date</mat-label>
-        <input matInput formControlName="datetime" [matDatepicker]="picker">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker touchUi #picker></mat-datepicker>
+        <mat-label>From</mat-label>
+        <input matInput formControlName="from" placeholder="From" required>
+        <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
       </mat-form-field>
-      <mat-form-field appearance="outline" floatLabel="Time">
-        <mat-label>Time</mat-label>
-        <input matInput formControlName="time" readonly  value={{time}} [ngStyle]="{visibility: 'hidden'}">
-        <ion-datetime
-          display-format="HH:mm"
-          picker-format="HH:mm"
-          value={{time}}
-          (ionChange) = "setTime($event)"
-        ></ion-datetime>
+      <mat-form-field appearance="outline">
+        <mat-label>To</mat-label>
+        <input matInput formControlName="to" placeholder="To" required>
+        <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
       </mat-form-field>
-    </div>
-    <div class="buttons">
-      <button mat-raised-button color="warn" [disabled]="searchform.invalid" (click)="searchTransports()">Search</button>
-      <button mat-stroked-button (click)="clearResults()">Clear</button>
-    </div>
-  </form>
+      <div class="datetime">
+        <mat-form-field appearance="outline">
+          <mat-label>Choose a date</mat-label>
+          <input matInput formControlName="datetime" [matDatepicker]="picker">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker touchUi #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="Time">
+          <mat-label>Time</mat-label>
+          <input matInput formControlName="time" readonly  value={{time}} [ngStyle]="{visibility: 'hidden'}">
+          <ion-datetime
+            display-format="HH:mm"
+            picker-format="HH:mm"
+            value={{time}}
+            (ionChange) = "setTime($event)"
+          ></ion-datetime>
+        </mat-form-field>
+      </div>
+      <div class="buttons">
+        <button mat-raised-button color="warn" [disabled]="searchform.invalid" (click)="searchTransports()">Search</button>
+        <button mat-stroked-button (click)="clearResults()">Clear</button>
+      </div>
+    </form>
 
 
-</div>
+  </div>
 
-<mat-tab-group [selectedIndex]="selectedIndexTab"
-                (selectedIndexChange)="selectedTab($event)">
-  <mat-tab label="Connections">
-    <app-connections
-      *ngIf="resultView$ | async"
-      (openConnection)="openDetail()"
-      [connections]="connections$ | async"
-      [tab]="tab0"></app-connections>
-  </mat-tab>
-  <mat-tab label="Favorite Connections">
-    <app-connections
-      *ngIf="resultView$ | async"
-      (openConnection)="openDetail()"
-      [connections]="favoritesConnections$ | async"
-      [tab]="tab1"></app-connections>
-  </mat-tab>
-</mat-tab-group>
+  <mat-tab-group [selectedIndex]="selectedIndexTab"
+                  (selectedIndexChange)="selectedTab($event)">
+    <mat-tab label="Connections">
+      <app-connections
+        *ngIf="resultView$ | async"
+        (openConnection)="openDetail()"
+        [connections]="connections$ | async"
+        [tab]="tab0"></app-connections>
+    </mat-tab>
+    <mat-tab label="Favorite Connections">
+      <app-connections
+        *ngIf="resultView$ | async"
+        (openConnection)="openDetail()"
+        [connections]="favoritesConnections$ | async"
+        [tab]="tab1"></app-connections>
+    </mat-tab>
+  </mat-tab-group>
 
-<mat-progress-bar *ngIf="loading$ | async" mode="indeterminate"></mat-progress-bar>
+  <mat-progress-bar *ngIf="loading$ | async" mode="indeterminate"></mat-progress-bar>
 
-<div class="morebutton" *ngIf="resultView$ | async">
-  <button class="bottom-toolbar" mat-raised-button color="warn"
-  [disabled] = "page === 3"
-  (click)="loadMoreConnections()">Load More Connections</button>
-</div>
+  <div class="morebutton" *ngIf="resultView$ | async">
+    <button class="bottom-toolbar" mat-raised-button color="warn"
+    [disabled] = "page === 3"
+    (click)="loadMoreConnections()">Load More Connections</button>
+  </div>
+</ion-content>

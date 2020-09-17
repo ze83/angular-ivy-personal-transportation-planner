@@ -44,6 +44,9 @@ export class TransportsComponent implements OnInit {
   ngOnInit() {
 
     this.connections$ = this.store.pipe(select(selectTransports));
+    this.connections$.subscribe(connections => {
+      this.scrollToDown();
+    });
 
     this.favoritesConnections$ = this.store.pipe(select(selectFavoriteTransports));
 
@@ -101,6 +104,19 @@ export class TransportsComponent implements OnInit {
   selectedTab(index: number) {
     this.selectedIndexTab = index;
     console.log(this.selectedIndexTab);
+  }
+
+   getContent() {
+    return document.querySelector('ion-content');
+  }
+
+  scrollToDown() {
+    console.log('scrollToDown');
+    setTimeout(() => {
+      if (this.getContent()) {
+        this.getContent().scrollToBottom(1000);
+      }
+    }, 500);
   }
 
   setTime(event: CustomEvent) {
