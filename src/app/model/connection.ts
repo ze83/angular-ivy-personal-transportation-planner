@@ -10,4 +10,5 @@ export interface Connection {
   from: {station: Station, departure: string};
   to: {station: Station, arrival: string};
   transfers: number;
+  highlighted: boolean;
 }

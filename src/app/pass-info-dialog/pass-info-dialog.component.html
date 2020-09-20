@@ -1,16 +1,19 @@
-<!-- <h2 mat-dialog-title><mat-icon>train</mat-icon>{{journey.name}}</h2> -->
-<mat-list mat-dialog-title>
-  <mat-list-item>
-    <mat-icon mat-list-icon>train</mat-icon>
-    <div mat-line><strong>{{journey.name}}</strong></div>
-    <div mat-line *ngIf="journey.to !== null ? true : false">
-          Direction {{journey.to}}
-    </div>
-  </mat-list-item>
-  <mat-divider></mat-divider>
-</mat-list>
-<mat-dialog-content>
-    <ng-container>
+<ion-header translucent>
+  <ion-toolbar class="dialheader">
+    <ion-icon slot="start" size="large" name="train"></ion-icon>
+    <ion-title >
+     {{journey.name}}  
+    </ion-title>
+    <ion-title *ngIf="journey.to !== null ? true : false" size="small">
+      Direction {{journey.to}}
+    </ion-title>    
+    <ion-buttons slot="end">
+      <ion-button color="light" (click)="onClose()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
     <mat-list class="passList">
       <div *ngFor="let pass of journey.passList" class="passInfo">
         <mat-list-item class="timetable_times">
@@ -25,9 +28,4 @@
       </div>
 
     </mat-list>
-    </ng-container>
-</mat-dialog-content>
-<div mat-dialog-actions align="end">
-  <button mat-button color="primary" (click)="onClose()">Close</button>
-  <!-- <button mat-button [mat-dialog-close]="data.d" cdkFocusInitial>Close</button> -->
-</div>
+</ion-content>

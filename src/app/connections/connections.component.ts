@@ -1,30 +1,50 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Connection } from '../model/connection';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import * as fromRoot from '../shared/app.reducer';
 import { areTransportsLoaded } from '../shared/transport.selectors';
 import { Update } from '@ngrx/entity';
 import { TransportActions } from '../shared/action-types';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-connections',
   templateUrl: './connections.component.html',
   styleUrls: ['./connections.component.css']
 })
-export class ConnectionsComponent implements OnInit {
+export class ConnectionsComponent implements OnInit, OnDestroy {
 
   @Input() connections: Connection[];
   @Input() tab: string;
   @Output() openConnection = new EventEmitter();
+  @Output() scrollingActivation = new EventEmitter<boolean>();
   selectedRowIndex: string;
+  handset = false;
+  breakpointSubscription: Subscription;
 
   displayedColumns = ['time', 'journey', 'transfers', 'platform', 'favorite'];
   constructor(
-    private store: Store<fromRoot.State>
-  ) { }
+    private store: Store<fromRoot.State>,
+    private breakpointObserver: BreakpointObserver
+  ) { 
+    this.breakpointSubscription = breakpointObserver.observe([
+      Breakpoints.Handset
+    ]).subscribe(result => {
+      if (result.matches) {
+        this.displayedColumns = ['time', 'favorite'];
+        this.handset = true;
+      } else {
+        this.displayedColumns = ['time', 'journey', 'transfers', 'platform', 'favorite'];
+        this.handset = false;
+      }
+    });
+  }
 
   ngOnInit() {
+    if (this.tab === 'favorite') {
+      this.connections = this.connections.filter(connection => connection.favorite === true);
+    }
   }
 
   editFavoriteValue(connection: Connection, ...params) {
@@ -50,15 +70,15 @@ export class ConnectionsComponent implements OnInit {
       id: newConnection.id,
       changes: newConnection
     };
-
+    this.scrollingActivation.emit(false);
     this.store.dispatch(TransportActions.setConnectionFavorited({update}));
-
-    // this.openConnection.emit(newConnection);
+    
   }
 
   openDetail(connection: Connection) {
     this.store.dispatch(TransportActions.setConnectionId({id: connection.id}));
-    this.openConnection.emit();
+    this.scrollingActivation.emit(false);
+    this.openConnection.emit(connection);
     this.selectedRowIndex = connection.id;
 
   }
@@ -68,6 +88,10 @@ export class ConnectionsComponent implements OnInit {
     console.log(this.selectedRowIndex);
   }
 
-
+  ngOnDestroy() {
+    if(this.breakpointSubscription) {
+      this.breakpointSubscription.unsubscribe();
+    }
+  }
 
 }

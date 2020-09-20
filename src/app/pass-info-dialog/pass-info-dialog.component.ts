@@ -1,5 +1,5 @@
 import { Journey } from './../model/journey';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface DialogData {
@@ -14,21 +14,21 @@ export interface DialogData {
 })
 export class PassInfoDialogComponent implements OnInit {
 
-  dialogTitle: string;
-  journey: Journey;
+  @Input() dialogTitle: string;
+  @Input() journey: Journey;
+  @Input() modal: HTMLIonModalElement;
+
   constructor(
-    private dialogRef: MatDialogRef<PassInfoDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
-    this.dialogTitle = data.dialogTitle;
-    this.journey = data.info;
   }
 
   ngOnInit() {
   }
 
   onClose() {
-    this.dialogRef.close();
+    this.modal.dismiss({
+      'dismissed': true
+    });
   }
 
 }

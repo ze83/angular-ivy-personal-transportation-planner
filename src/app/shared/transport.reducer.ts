@@ -64,6 +64,9 @@ export const transportReducer = createReducer(
           }
       )),
 
+    on(TransportActions.setAllConnectionsUpdated,
+      (state, action) => adapter.updateMany(action.update, state)),
+
     on(TransportActions.setConnectionFavorited,
       (state, action) => adapter.updateOne(action.update, state)),
 

@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { TransportActions } from '../../shared/action-types';
 import { MatDialog } from '@angular/material/dialog';
 import { defaultDialogConfig } from '../../shared/default-dialog-config';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-sections',
@@ -26,7 +27,7 @@ export class SectionsComponent implements OnInit, OnDestroy {
   constructor(
     private utility: Utility,
     private store: Store<fromRoot.State>,
-    private dialog: MatDialog
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
@@ -54,22 +55,28 @@ export class SectionsComponent implements OnInit, OnDestroy {
     this.setConnectionSelected();
   }
 
-  openTrainInfoDialog(journey: Journey) {
-    const dialogConfig = defaultDialogConfig();
+  async openTrainInfoDialog(journey: Journey) {
 
-    dialogConfig.data = {
-      dialogTitle: 'Train Info: ' + journey.name,
-      info: journey
-    };
-
-    this.dialog.open(PassInfoDialogComponent, dialogConfig).
-    afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+    const modal = await this.modalController.create({
+      component: PassInfoDialogComponent,
+      componentProps: {
+        'dialogTitle' : 'Train Info: ' + journey.name,
+        'journey' : journey,
+        'modal' : this
+      },
+      swipeToClose: true
     });
+
+    modal.present();
+
+    const { data } = await modal.onWillDismiss();
+    console.log(data);
+
   }
 
   setConnectionSelected() {
     this.store.dispatch(TransportActions.setConnectionId({id: this.connection.id}));
+    this.utility.updateAllConnections(this.store, this.connections, this.connection);
   }
 
   // tslint:disable-next-line: use-lifecycle-interface

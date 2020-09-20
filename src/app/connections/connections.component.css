@@ -1,9 +1,11 @@
 .element-row:not(.expanded-row):hover {
   background: whitesmoke;
+  cursor: pointer
 }
 
-.element-row:not(.expanded-row):active {
-  background: #efefef;
+
+mat-cell:first-of-type {
+  padding-left: 0 !important;
 }
 
 .mat-column-transfers,

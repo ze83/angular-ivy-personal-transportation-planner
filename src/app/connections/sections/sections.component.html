@@ -14,7 +14,8 @@
   </mat-toolbar>
 </div>
 <mat-accordion class="section-accordion" multi>
-  <mat-expansion-panel *ngFor="let section of connection.sections" [expanded]=true>
+  <mat-expansion-panel *ngFor="let section of connection.sections" 
+  [expanded]=true [hideToggle]=true [disabled]=true>
     <mat-expansion-panel-header>
       <mat-panel-title>
         <mat-list-item>

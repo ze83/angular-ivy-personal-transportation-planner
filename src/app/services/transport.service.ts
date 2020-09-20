@@ -72,7 +72,8 @@ export class TransportService {
               favorite: false,
               from: this.getFrom(connect),
               to: this.getTo(connect),
-              transfers: connect.transfers
+              transfers: connect.transfers,
+              highlighted: false
             };
             this.connections.push(conn);
           });

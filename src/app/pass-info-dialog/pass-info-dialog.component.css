@@ -2,6 +2,12 @@
   padding: 0 6px !important
 }
 
+.dialheader {
+  --background: #f44336;
+  --color: #fff
+}
+
+
 .passList {
   display: grid;
   place-content: center;

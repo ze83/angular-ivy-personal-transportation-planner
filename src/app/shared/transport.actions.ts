@@ -25,6 +25,13 @@ export const setConnectionFavorited = createAction (
 
 );
 
+export const setAllConnectionsUpdated = createAction(
+
+  '[Edit Connections] Update All Connections',
+  props<{update: Update<Connection>[]}>()
+  
+);
+
 export const setConnectionId = createAction(
 
   '[Set Connection] Connection Detail Opened',

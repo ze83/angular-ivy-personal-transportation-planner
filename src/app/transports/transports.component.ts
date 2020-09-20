@@ -3,11 +3,12 @@ import { TransportService } from '../services/transport.service';
 import * as fromRoot from '../shared/app.reducer';
 import { Store, State, select } from '@ngrx/store';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Connection } from '../model/connection';
 import { selectTransports, selectFavoriteTransports, areTransportsLoaded, loading } from '../shared/transport.selectors';
 import { TransportActions } from '../shared/action-types';
 import { DatePipe } from '@angular/common';
+import { Utility } from '../shared/utility';
 
 @Component({
   selector: 'app-transports',
@@ -23,15 +24,19 @@ export class TransportsComponent implements OnInit {
   favoritesConnections$: Observable<Connection[]>;
   resultView$: Observable<boolean>;
   loading$: Observable<boolean>;
+  connections: Connection[];
+  connectionsSubscription: Subscription;
   time: string;
   page = 0;
   selectedIndexTab = 0;
   tab0 = 'normal'; //
   tab1 = 'favorite'; //favorite
+  scrollingActivated = false;
   constructor(
     private fb: FormBuilder,
     private store: Store<fromRoot.State>,
-    private datepipe: DatePipe
+    private datepipe: DatePipe,
+    private utility: Utility
   ) {
     this.searchform = this.fb.group({
       from: ['Dornach', Validators.required],
@@ -45,7 +50,10 @@ export class TransportsComponent implements OnInit {
 
     this.connections$ = this.store.pipe(select(selectTransports));
     this.connections$.subscribe(connections => {
-      this.scrollToDown();
+      this.connections = connections;
+      if (this.scrollingActivated) {
+        this.scrollToDown();
+      }
     });
 
     this.favoritesConnections$ = this.store.pipe(select(selectFavoriteTransports));
@@ -65,6 +73,7 @@ export class TransportsComponent implements OnInit {
   searchTransports() {
     this.page = 0;
     this.selectedIndexTab = 0;
+    this.scrollingActivated = true;
     this.loadConnections();
   }
 
@@ -89,11 +98,18 @@ export class TransportsComponent implements OnInit {
     this.searchform.controls.to.reset();
   }
 
-  openDetail() {
+  openDetail(connection: Connection) {
+    this.scrollingActivated = false;
+    this.utility.updateAllConnections(this.store, this.connections, connection);
     this.onConnectionClick.emit();
   }
 
+  onScrollingActivation(activated: boolean) {
+    this.scrollingActivated = activated;
+  }
+
   loadMoreConnections() {
+    this.scrollingActivated = true;
     if (this.page <= 3 ) {
       this.selectedIndexTab = 0;
       this.page += 1;
@@ -114,7 +130,7 @@ export class TransportsComponent implements OnInit {
     console.log('scrollToDown');
     setTimeout(() => {
       if (this.getContent()) {
-        this.getContent().scrollToBottom(1000);
+        this.getContent().scrollToBottom(600);
       }
     }, 500);
   }

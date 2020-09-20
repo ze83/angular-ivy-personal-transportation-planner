@@ -1,0 +1,54 @@
+#searchform {
+  padding: 3%;
+}
+
+#searchform > form {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  column-gap: 1em;
+}
+
+#searchform > form ion-datetime {
+  position: absolute;
+  top: 0px;
+  left: -15px;
+  width: 100%;
+}
+
+.datetime {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+  column-gap: 1em;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+  column-gap: 1em;
+  height: 62px;
+}
+
+
+.buttons > button {
+  margin-right: 1em;
+  width: 100%;
+}
+
+.morebutton {
+  display: grid;
+  place-items: center;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.spinner-container {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-top: 80px;
+  z-index: 9;
+}
+

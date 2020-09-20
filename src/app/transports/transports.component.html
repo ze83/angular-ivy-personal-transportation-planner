@@ -50,16 +50,20 @@
     <mat-tab label="Connections">
       <app-connections
         *ngIf="resultView$ | async"
-        (openConnection)="openDetail()"
+        (openConnection)="openDetail($event)"
+        (scrollingActivation)="onScrollingActivation($event)"
         [connections]="connections$ | async"
-        [tab]="tab0"></app-connections>
+        [tab]="tab0">
+      </app-connections>
     </mat-tab>
     <mat-tab label="Favorite Connections">
       <app-connections
         *ngIf="resultView$ | async"
-        (openConnection)="openDetail()"
+        (openConnection)="openDetail($event)"
+        (scrollingActivation)="onScrollingActivation($event)"
         [connections]="favoritesConnections$ | async"
-        [tab]="tab1"></app-connections>
+        [tab]="tab1">
+      </app-connections>
     </mat-tab>
   </mat-tab-group>
 

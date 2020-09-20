@@ -19,9 +19,18 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   font-size: 1.6em;
 }
 
-#header .subtitle {
+#header .subtitle,
+.primaryfont {
   font-size: 1em;
   font-weight: 300;
+}
+
+.center {
+  text-align: center;
+}
+
+.marginT2em {
+  margin-top: 2em;
 }
 
 #header .subtitle_mobile {
@@ -72,9 +81,8 @@ ion-button, .button-native, .info-button{
   --color: var(--ion-color-primary-contrast, #fff);
 }
 
-mat-row {
-  background: #f2f2f2 !important;
-  border-bottom-color: #fff !important;
+.mat-row.highlighted {
+  background: #d3d0d0 !important
 }
 
 .mat-column-select {
@@ -90,9 +98,6 @@ mat-row {
   font-size: 15px !important;
 }
 
-mat-row:hover {
-  background: #d3d0d0 !important
-}
 
 @media screen and (max-width: 499px) {
   .title {
