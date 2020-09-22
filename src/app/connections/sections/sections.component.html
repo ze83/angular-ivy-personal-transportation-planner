@@ -2,13 +2,13 @@
 <div>walk duration: {{connection == undefined ? '' : connection.duration}}</div> -->
 <div>
   <mat-toolbar class="sectionToolbar">
-    <button mat-icon-button color="basic" (click)="skipPrevious()" [disabled]=isErst >
+    <button mat-raised-button color="primary" (click)="skipPrevious()" [disabled]=isErst >
       <mat-icon>skip_previous</mat-icon>
     </button>
     <span class="spacer"></span>
     <span class="colorSecondary">JOURNEY</span>
     <span class="spacer"></span>
-    <button mat-icon-button color="basic" (click)="skipNext()" [disabled]=isLast>
+    <button mat-raised-button color="primary" (click)="skipNext()" [disabled]=isLast>
       <mat-icon>skip_next</mat-icon>
     </button>
   </mat-toolbar>

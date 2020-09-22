@@ -11,6 +11,7 @@ import { TransportActions } from '../../shared/action-types';
 import { MatDialog } from '@angular/material/dialog';
 import { defaultDialogConfig } from '../../shared/default-dialog-config';
 import { ModalController } from '@ionic/angular';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-sections',
@@ -24,11 +25,13 @@ export class SectionsComponent implements OnInit, OnDestroy {
   connections: Connection[];
   isLast = false;
   isErst = false;
+  smallhandset = false;
   constructor(
     private utility: Utility,
     private store: Store<fromRoot.State>,
     private modalController: ModalController
-  ) { }
+  ) { 
+  }
 
   ngOnInit() {
     this.connectionsSubscription = this.store.pipe(select(selectTransports)).subscribe(

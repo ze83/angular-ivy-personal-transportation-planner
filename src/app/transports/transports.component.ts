@@ -9,6 +9,7 @@ import { selectTransports, selectFavoriteTransports, areTransportsLoaded, loadin
 import { TransportActions } from '../shared/action-types';
 import { DatePipe } from '@angular/common';
 import { Utility } from '../shared/utility';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-transports',
@@ -32,11 +33,13 @@ export class TransportsComponent implements OnInit {
   tab0 = 'normal'; //
   tab1 = 'favorite'; //favorite
   scrollingActivated = false;
+  handset = false;
   constructor(
     private fb: FormBuilder,
     private store: Store<fromRoot.State>,
     private datepipe: DatePipe,
-    private utility: Utility
+    private utility: Utility,
+    private breakpointObserver: BreakpointObserver
   ) {
     this.searchform = this.fb.group({
       from: ['Dornach', Validators.required],
@@ -44,6 +47,18 @@ export class TransportsComponent implements OnInit {
       datetime: [new Date()],
       time: ''
     });
+    this.breakpointObserver.observe([
+        // Breakpoints.Handset
+        '(max-width: 455px)'
+      ]).subscribe(result => {
+        if (result.matches) {
+          // this.activateHandsetLayout();
+          // console.log('dimensione handset');
+          this.handset = true;
+        } else {
+          this.handset = false;
+        }
+      });
   }
 
   ngOnInit() {
@@ -75,6 +90,13 @@ export class TransportsComponent implements OnInit {
     this.selectedIndexTab = 0;
     this.scrollingActivated = true;
     this.loadConnections();
+  }
+
+  swapFromToValues(event: CustomEvent) {
+    const fromValue = this.searchform.controls.from.value;
+    const toValue = this.searchform.controls.to.value;
+    this.searchform.controls.from.setValue(toValue);
+    this.searchform.controls.to.setValue(fromValue);
   }
 
   loadConnections() {

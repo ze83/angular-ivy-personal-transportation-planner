@@ -16,17 +16,40 @@
   width: 100%;
 }
 
+.fromtofield {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  column-gap: 1.8em;
+  position: relative;
+}
+
+.fromtofield > mat-icon {
+  position: absolute;
+  top: -20px;
+  bottom: 0;
+  margin: auto;
+  left: 0;
+  right: 0;
+  cursor: pointer;
+}
+
 .datetime {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+  grid-template-columns: 1fr auto;
   column-gap: 1em;
+}
+
+.datetimefield {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+  column-gap: 1.5em;
 }
 
 .buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
-  column-gap: 1em;
-  height: 62px;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1.5em;
+  height: 60px;
 }
 
 

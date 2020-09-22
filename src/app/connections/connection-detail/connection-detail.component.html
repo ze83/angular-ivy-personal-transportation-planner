@@ -45,9 +45,9 @@
         </div>
       </mat-list-item>
       <mat-list-item>
-        <mat-icon mat-list-icon>transfer_within_a_station</mat-icon>
+        <mat-icon mat-list-icon *ngIf="!smallhandset">transfer_within_a_station</mat-icon>
         <div mat-line>Transfers</div>
-        <div mat-line style="text-align: center;">
+        <div mat-line style="padding-left: 2em">
             <strong>
               {{connection == undefined ? '' : connection.transfers}}
             </strong>

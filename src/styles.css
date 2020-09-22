@@ -98,6 +98,15 @@ ion-button, .button-native, .info-button{
   font-size: 15px !important;
 }
 
+@media screen and (max-width: 359px) {
+  .connection-detail {
+    grid-template-columns: 1fr !important;
+  }
+  .connection-detail mat-list:last-child {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 @media screen and (max-width: 499px) {
   .title {
@@ -116,6 +125,13 @@ ion-button, .button-native, .info-button{
   .title_mobile,
   .subtitle_mobile {
     display: none !important;
+  }
+}
+
+/* large handset */
+@media screen and (max-width: 599px) {
+  .datetime {
+    grid-template-columns: 1fr !important;
   }
 }
 
