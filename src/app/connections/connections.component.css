@@ -8,6 +8,7 @@ mat-cell:first-of-type {
   padding-left: 0 !important;
 }
 
+.mat-column-journey,
 .mat-column-transfers,
 .mat-column-platform,
 .mat-column-favorite {
